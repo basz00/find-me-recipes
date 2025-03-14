@@ -25,7 +25,7 @@ export class ManageIngredientsUseCaseImpl implements ManageIngredientsUseCase {
   }
 
   addIngredients(input: string): Ingredient[] {
-    const ingredientNames = input.split(",");
+    const ingredientNames = input.split(",").map((name) => name.trim());
     return this.repository.addIngredients(ingredientNames);
   }
 

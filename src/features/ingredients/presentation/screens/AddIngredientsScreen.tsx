@@ -38,14 +38,53 @@ export const AddIngredientsScreen = () => {
     handleAddIngredient();
   };
 
+  const renderTextInput = () => (
+    <View style={styles.inputContainer}>
+      <TextInput
+        style={styles.input}
+        value={inputText}
+        onChangeText={setInputText}
+        placeholder="Enter ingredient..."
+        placeholderTextColor={colors.text.secondary}
+        onSubmitEditing={handleSubmitEditing}
+        returnKeyType="done"
+      />
+      <TouchableOpacity
+        style={[styles.addButton, !inputText.trim() && styles.disabledButton]}
+        onPress={handleAddIngredient}
+        disabled={!inputText.trim()}
+      >
+        <Text style={styles.addButtonText}>Add</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   const renderIngredientItem = ({ item }: { item: Ingredient }) => (
-    <TouchableOpacity
-      style={styles.ingredientItem}
-      onPress={() => handleRemoveIngredient(item.id)}
-    >
+    <TouchableOpacity style={styles.ingredientItem}>
       <Text style={styles.ingredientText}>{item.name}</Text>
-      <Text style={styles.removeText}>×</Text>
+      <TouchableOpacity
+        style={styles.removeButton}
+        onPress={() => handleRemoveIngredient(item.id)}
+      >
+        <Text style={styles.removeText}>×</Text>
+      </TouchableOpacity>
     </TouchableOpacity>
+  );
+
+  const renderFindButton = () => (
+    <View>
+      <TouchableOpacity
+        style={[
+          styles.searchButton,
+          !ingredients.length && styles.disabledButton,
+        ]}
+        disabled={!ingredients.length}
+      >
+        <Text style={styles.searchButtonText}>
+          Find Recipes ({ingredients.length})
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 
   return (
@@ -56,27 +95,7 @@ export const AddIngredientsScreen = () => {
           Enter ingredients you have (separate with comma or press enter)
         </Text>
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            value={inputText}
-            onChangeText={setInputText}
-            placeholder="Enter ingredient..."
-            placeholderTextColor={colors.text.secondary}
-            onSubmitEditing={handleSubmitEditing}
-            returnKeyType="done"
-          />
-          <TouchableOpacity
-            style={[
-              styles.addButton,
-              !inputText.trim() && styles.disabledButton,
-            ]}
-            onPress={handleAddIngredient}
-            disabled={!inputText.trim()}
-          >
-            <Text style={styles.addButtonText}>Add</Text>
-          </TouchableOpacity>
-        </View>
+        {renderTextInput()}
       </View>
 
       <FlatList
@@ -88,19 +107,7 @@ export const AddIngredientsScreen = () => {
         keyboardShouldPersistTaps="handled"
       />
 
-      <View>
-        <TouchableOpacity
-          style={[
-            styles.searchButton,
-            !ingredients.length && styles.disabledButton,
-          ]}
-          disabled={!ingredients.length}
-        >
-          <Text style={styles.searchButtonText}>
-            Find Recipes ({ingredients.length})
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {renderFindButton()}
     </View>
   );
 };
@@ -195,5 +202,9 @@ const makeStyles = (
     },
     disabledButton: {
       opacity: 0.5,
+    },
+    removeButton: {
+      padding: spacing.xs,
+      marginLeft: spacing.xs,
     },
   });
