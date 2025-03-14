@@ -1,5 +1,6 @@
 import { BehaviorSubject, Observable } from "rxjs";
 import { Ingredient } from "../entities/ingredient";
+import { injectable } from "inversify";
 
 export interface IngredientsRepository {
   getIngredients(): Ingredient[];
@@ -8,6 +9,7 @@ export interface IngredientsRepository {
   observeIngredients(): Observable<Ingredient[]>;
 }
 
+@injectable()
 export class IngredientsRepositoryImpl implements IngredientsRepository {
   private ingredients$ = new BehaviorSubject<Ingredient[]>([]);
 

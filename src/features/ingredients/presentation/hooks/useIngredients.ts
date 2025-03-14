@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Ingredient } from "../../domain/entities/ingredient";
-import { IngredientsRepositoryImpl } from "../../domain/repositories/ingredients.repository";
-import { ManageIngredientsUseCaseImpl } from "../../domain/usecases/manage-ingredients.usecase";
+import { ManageIngredientsUseCase } from "../../domain/usecases/manage-ingredients.usecase";
+import { container } from "../../../../core/di/container";
+import { TYPES } from "../../../../core/di/types";
 
-const useCase = new ManageIngredientsUseCaseImpl(
-  new IngredientsRepositoryImpl()
+const useCase = container.get<ManageIngredientsUseCase>(
+  TYPES.ManageIngredientsUseCase
 );
 
 export const useIngredients = () => {
@@ -14,7 +15,6 @@ export const useIngredients = () => {
     const subscription = useCase
       .observeIngredients()
       .subscribe((newIngredients) => setIngredients(newIngredients));
-
     return () => subscription.unsubscribe();
   }, []);
 

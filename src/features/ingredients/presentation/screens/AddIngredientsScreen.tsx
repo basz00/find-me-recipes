@@ -1,17 +1,16 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import {
-  View,
+  FlatList,
+  StyleSheet,
   Text,
   TextInput,
-  FlatList,
   TouchableOpacity,
-  StyleSheet,
+  View,
 } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useTheme } from "../../../../core/ui/theme/ThemeContext";
 import { colors as themeColors } from "../../../../core/ui/theme/colors";
-import { typography as themeTypography } from "../../../../core/ui/theme/typography";
 import { spacing as themeSpacing } from "../../../../core/ui/theme/spacing";
+import { typography as themeTypography } from "../../../../core/ui/theme/typography";
 import { Ingredient } from "../../domain/entities/ingredient";
 import { useIngredients } from "../hooks/useIngredients";
 

@@ -1,4 +1,7 @@
+import { container } from "@/src/core/di/container";
+import { injectable } from "inversify";
 import { Observable } from "rxjs";
+import { TYPES } from "../../../../core/di/types";
 import { Ingredient } from "../entities/ingredient";
 import { IngredientsRepository } from "../repositories/ingredients.repository";
 
@@ -9,8 +12,13 @@ export interface ManageIngredientsUseCase {
   observeIngredients(): Observable<Ingredient[]>;
 }
 
+@injectable()
 export class ManageIngredientsUseCaseImpl implements ManageIngredientsUseCase {
-  constructor(private repository: IngredientsRepository) {}
+  constructor(
+    private repository: IngredientsRepository = container.get(
+      TYPES.IngredientsRepository
+    )
+  ) {}
 
   observeIngredients(): Observable<Ingredient[]> {
     return this.repository.observeIngredients();
