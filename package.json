@@ -1,6 +1,6 @@
 {
   "name": "find-me-recipes",
-  "main": "expo-router/entry",
+  "main": "src/index.tsx",
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
