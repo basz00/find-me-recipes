@@ -1,0 +1,12 @@
+{
+  "addIngredients": {
+    "title": "Add Your Ingredients",
+    "subtitle": "Enter ingredients you have (separate with comma or press enter)",
+    "inputPlaceholder": "Enter ingredient...",
+    "addButton": "Add",
+    "findRecipesButtonCount": "Find Recipes ({{count}})"
+  },
+  "general": {
+    "error": "Something went wrong"
+  }
+}

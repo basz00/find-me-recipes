@@ -1,11 +1,14 @@
+import { TranslationService } from "@/core/common/translation/TranslationService";
+import { container } from "@/core/di/container";
+import { TYPES } from "@/core/di/types";
 import React, { useCallback, useState } from "react";
 import {
-  FlatList,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
+  Pressable,
   View,
+  FlatList,
 } from "react-native";
 import { useTheme } from "../../../../core/ui/theme/ThemeContext";
 import { colors as themeColors } from "../../../../core/ui/theme/colors";
@@ -13,15 +16,22 @@ import { spacing as themeSpacing } from "../../../../core/ui/theme/spacing";
 import { typography as themeTypography } from "../../../../core/ui/theme/typography";
 import { Ingredient } from "../../domain/entities/ingredient";
 import { useIngredients } from "../hooks/useIngredients";
+import { addIngredientsTranslation } from "../translation/TranslationMapper";
+import { count } from "rxjs";
 
-export const AddIngredientsScreen = () => {
+const AddIngredientsScreen = () => {
+  const translationService = container.get<TranslationService>(
+    TYPES.TranslationService
+  );
+
   const { colors, typography, spacing } = useTheme();
+  const t = translationService.t;
   const [inputText, setInputText] = useState("");
   const { ingredients, addIngredients, removeIngredient } = useIngredients();
   const styles = makeStyles(colors, typography, spacing);
 
   const handleAddIngredient = useCallback(() => {
-    if (inputText.trim()) {
+    if (inputText.trim().length > 0) {
       addIngredients(inputText);
       setInputText("");
     }
@@ -38,45 +48,73 @@ export const AddIngredientsScreen = () => {
     handleAddIngredient();
   };
 
+  const renderTextInput = () => (
+    <View style={styles.inputContainer}>
+      <TextInput
+        style={styles.input}
+        value={inputText}
+        onChangeText={setInputText}
+        placeholder={t(addIngredientsTranslation.inputPlaceholder)}
+        placeholderTextColor={colors.text.secondary}
+        onSubmitEditing={handleSubmitEditing}
+        returnKeyType="done"
+        testID="ingredient-input"
+      />
+      <Pressable
+        style={[styles.addButton, !inputText.trim() && styles.disabledButton]}
+        onPress={handleAddIngredient}
+        disabled={!inputText.trim()}
+        testID="add-ingredient-button"
+      >
+        <Text style={styles.addButtonText}>
+          {t(addIngredientsTranslation.button.add)}
+        </Text>
+      </Pressable>
+    </View>
+  );
+
   const renderIngredientItem = ({ item }: { item: Ingredient }) => (
-    <TouchableOpacity
+    <Pressable
       style={styles.ingredientItem}
-      onPress={() => handleRemoveIngredient(item.id)}
+      testID={`ingredient-item-${item.id}`}
     >
       <Text style={styles.ingredientText}>{item.name}</Text>
-      <Text style={styles.removeText}>×</Text>
-    </TouchableOpacity>
+      <Pressable
+        style={styles.removeButton}
+        onPress={() => handleRemoveIngredient(item.id)}
+      >
+        <Text style={styles.removeText}>x</Text>
+      </Pressable>
+    </Pressable>
+  );
+
+  const renderFindButton = () => (
+    <View>
+      <Pressable
+        style={[
+          styles.searchButton,
+          !ingredients.length && styles.disabledButton,
+        ]}
+        disabled={!ingredients.length}
+      >
+        <Text style={styles.searchButtonText}>
+          {t(addIngredientsTranslation.button.find, {
+            count: ingredients.length,
+          })}
+        </Text>
+      </Pressable>
+    </View>
   );
 
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.title}>Add Your Ingredients</Text>
+        <Text style={styles.title}>{t(addIngredientsTranslation.title)}</Text>
         <Text style={styles.subtitle}>
-          Enter ingredients you have (separate with comma or press enter)
+          {t(addIngredientsTranslation.subtitle)}
         </Text>
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            value={inputText}
-            onChangeText={setInputText}
-            placeholder="Enter ingredient..."
-            placeholderTextColor={colors.text.secondary}
-            onSubmitEditing={handleSubmitEditing}
-            returnKeyType="done"
-          />
-          <TouchableOpacity
-            style={[
-              styles.addButton,
-              !inputText.trim() && styles.disabledButton,
-            ]}
-            onPress={handleAddIngredient}
-            disabled={!inputText.trim()}
-          >
-            <Text style={styles.addButtonText}>Add</Text>
-          </TouchableOpacity>
-        </View>
+        {renderTextInput()}
       </View>
 
       <FlatList
@@ -88,22 +126,12 @@ export const AddIngredientsScreen = () => {
         keyboardShouldPersistTaps="handled"
       />
 
-      <View>
-        <TouchableOpacity
-          style={[
-            styles.searchButton,
-            !ingredients.length && styles.disabledButton,
-          ]}
-          disabled={!ingredients.length}
-        >
-          <Text style={styles.searchButtonText}>
-            Find Recipes ({ingredients.length})
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {renderFindButton()}
     </View>
   );
 };
+
+export default AddIngredientsScreen;
 
 const makeStyles = (
   colors: typeof themeColors,
@@ -195,5 +223,9 @@ const makeStyles = (
     },
     disabledButton: {
       opacity: 0.5,
+    },
+    removeButton: {
+      padding: spacing.xs,
+      marginLeft: spacing.xs,
     },
   });

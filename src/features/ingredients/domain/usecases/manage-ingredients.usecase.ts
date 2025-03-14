@@ -1,4 +1,4 @@
-import { container } from "@/src/core/di/container";
+import { container } from "@/core/di/container";
 import { injectable } from "inversify";
 import { Observable } from "rxjs";
 import { TYPES } from "../../../../core/di/types";
@@ -25,7 +25,7 @@ export class ManageIngredientsUseCaseImpl implements ManageIngredientsUseCase {
   }
 
   addIngredients(input: string): Ingredient[] {
-    const ingredientNames = input.split(",");
+    const ingredientNames = input.split(",").map((name) => name.trim());
     return this.repository.addIngredients(ingredientNames);
   }
 
