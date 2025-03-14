@@ -6,41 +6,34 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useTheme } from "../../../../core/ui/theme/ThemeContext";
-
-type Ingredient = {
-  id: string;
-  name: string;
-};
+import { colors as themeColors } from "../../../../core/ui/theme/colors";
+import { typography as themeTypography } from "../../../../core/ui/theme/typography";
+import { spacing as themeSpacing } from "../../../../core/ui/theme/spacing";
+import { Ingredient } from "../../domain/entities/ingredient";
+import { useIngredients } from "../hooks/useIngredients";
 
 export const AddIngredientsScreen = () => {
-  const { colors } = useTheme();
+  const { colors, typography, spacing } = useTheme();
   const [inputText, setInputText] = useState("");
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const styles = makeStyles(colors);
+  const { ingredients, addIngredients, removeIngredient } = useIngredients();
+  const styles = makeStyles(colors, typography, spacing);
 
   const handleAddIngredient = useCallback(() => {
     if (inputText.trim()) {
-      const newIngredients = inputText
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean)
-        .map((name) => ({
-          id: Math.random().toString(),
-          name,
-        }));
-
-      setIngredients((prev) => [...prev, ...newIngredients]);
+      addIngredients(inputText);
       setInputText("");
     }
-  }, [inputText]);
+  }, [inputText, addIngredients]);
 
-  const handleRemoveIngredient = useCallback((id: string) => {
-    setIngredients((prev) => prev.filter((item) => item.id !== id));
-  }, []);
+  const handleRemoveIngredient = useCallback(
+    (id: string) => {
+      removeIngredient(id);
+    },
+    [removeIngredient]
+  );
 
   const handleSubmitEditing = () => {
     handleAddIngredient();
@@ -57,11 +50,8 @@ export const AddIngredientsScreen = () => {
   );
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <View style={styles.content}>
+    <View style={styles.container}>
+      <View>
         <Text style={styles.title}>Add Your Ingredients</Text>
         <Text style={styles.subtitle}>
           Enter ingredients you have (separate with comma or press enter)
@@ -88,15 +78,18 @@ export const AddIngredientsScreen = () => {
             <Text style={styles.addButtonText}>Add</Text>
           </TouchableOpacity>
         </View>
+      </View>
 
-        <FlatList
-          data={ingredients}
-          renderItem={renderIngredientItem}
-          keyExtractor={(item) => item.id}
-          style={styles.list}
-          contentContainerStyle={styles.listContent}
-        />
+      <FlatList
+        data={ingredients}
+        renderItem={renderIngredientItem}
+        keyExtractor={(item) => item.id}
+        style={styles.list}
+        contentContainerStyle={styles.listContent}
+        keyboardShouldPersistTaps="handled"
+      />
 
+      <View>
         <TouchableOpacity
           style={[
             styles.searchButton,
@@ -109,97 +102,97 @@ export const AddIngredientsScreen = () => {
           </Text>
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
-const makeStyles = (colors: any) =>
+const makeStyles = (
+  colors: typeof themeColors,
+  typography: typeof themeTypography,
+  spacing: typeof themeSpacing
+) =>
   StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: colors.background.default,
+      padding: spacing.md,
     },
-    content: {
+    list: {
       flex: 1,
-      padding: 16,
+      marginVertical: spacing.md,
+    },
+    listContent: {
+      gap: spacing.sm,
     },
     title: {
-      fontSize: 24,
-      fontWeight: "bold",
-      marginBottom: 8,
+      fontSize: typography.size["2xl"],
+      fontWeight: typography.weight.bold,
+      marginBottom: spacing.xs,
       color: colors.text.primary,
     },
     subtitle: {
-      fontSize: 14,
+      fontSize: typography.size.sm,
       color: colors.text.secondary,
-      marginBottom: 24,
+      marginBottom: spacing.xl,
     },
     inputContainer: {
       flexDirection: "row",
-      marginBottom: 16,
+      marginBottom: spacing.md,
+      gap: spacing.xs,
     },
     input: {
       flex: 1,
-      height: 48,
+      height: spacing["4xl"],
       borderWidth: 1,
       borderColor: colors.neutral.grey[200],
-      borderRadius: 8,
-      paddingHorizontal: 16,
-      marginRight: 8,
-      fontSize: 16,
+      borderRadius: spacing.xs,
+      paddingHorizontal: spacing.input.padding,
+      fontSize: typography.size.base,
       color: colors.text.primary,
       backgroundColor: colors.background.default,
     },
     addButton: {
       backgroundColor: colors.primary.main,
-      height: 48,
-      paddingHorizontal: 16,
-      borderRadius: 8,
+      height: spacing["4xl"],
+      paddingHorizontal: spacing.md,
+      borderRadius: spacing.xs,
       justifyContent: "center",
       alignItems: "center",
     },
     addButtonText: {
       color: colors.neutral.white,
-      fontSize: 16,
-      fontWeight: "600",
-    },
-    list: {
-      flex: 1,
-    },
-    listContent: {
-      paddingVertical: 8,
+      fontSize: typography.size.base,
+      fontWeight: typography.weight.semibold,
     },
     ingredientItem: {
       flexDirection: "row",
       backgroundColor: colors.neutral.grey[100],
-      padding: 12,
-      borderRadius: 8,
-      marginBottom: 8,
+      padding: spacing.md,
+      borderRadius: spacing.xs,
       alignItems: "center",
       justifyContent: "space-between",
     },
     ingredientText: {
-      fontSize: 16,
+      fontSize: typography.size.base,
       color: colors.text.primary,
       flex: 1,
     },
     removeText: {
-      fontSize: 20,
+      fontSize: typography.size.xl,
       color: colors.text.secondary,
-      marginLeft: 8,
+      marginLeft: spacing.xs,
     },
     searchButton: {
       backgroundColor: colors.primary.main,
-      height: 56,
-      borderRadius: 12,
+      height: spacing["5xl"],
+      borderRadius: spacing.sm,
       justifyContent: "center",
       alignItems: "center",
-      marginTop: 16,
     },
     searchButtonText: {
       color: colors.neutral.white,
-      fontSize: 18,
-      fontWeight: "600",
+      fontSize: typography.size.lg,
+      fontWeight: typography.weight.semibold,
     },
     disabledButton: {
       opacity: 0.5,

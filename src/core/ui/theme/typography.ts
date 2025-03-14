@@ -1,20 +1,38 @@
 export const typography = {
-  sizes: {
+  // Font sizes
+  size: {
     xs: 12,
     sm: 14,
-    md: 16,
+    base: 16,
     lg: 18,
     xl: 20,
-    xxl: 24,
-    xxxl: 32,
+    "2xl": 24,
+    "3xl": 30,
+    "4xl": 36,
   },
-  weights: {
+
+  // Font weights
+  weight: {
     regular: "400",
     medium: "500",
     semibold: "600",
     bold: "700",
   },
+
+  // Line heights
+  lineHeight: {
+    tight: 1.25,
+    normal: 1.5,
+    relaxed: 1.75,
+  },
+
+  // Letter spacing
+  letterSpacing: {
+    tighter: -0.5,
+    normal: 0,
+    wider: 0.5,
+  },
 } as const;
 
-export type FontSize = keyof typeof typography.sizes;
-export type FontWeight = keyof typeof typography.weights;
+export type FontSize = keyof typeof typography.size;
+export type FontWeight = keyof typeof typography.weight;
