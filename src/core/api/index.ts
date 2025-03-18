@@ -1,0 +1,1 @@
+export { SpoonacularApi } from './spoonacular';

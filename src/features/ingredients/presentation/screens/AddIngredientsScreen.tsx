@@ -2,6 +2,9 @@ import { TranslationService } from "@/core/common/translation/TranslationService
 import { container } from "@/core/di/container";
 import { TYPES } from "@/core/di/types";
 import React, { useCallback, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "@/core/navigation";
 import {
   StyleSheet,
   Text,
@@ -10,14 +13,13 @@ import {
   View,
   FlatList,
 } from "react-native";
-import { useTheme } from "../../../../core/ui/theme/ThemeContext";
-import { colors as themeColors } from "../../../../core/ui/theme/colors";
-import { spacing as themeSpacing } from "../../../../core/ui/theme/spacing";
-import { typography as themeTypography } from "../../../../core/ui/theme/typography";
+import { useTheme } from "@/core/ui/theme/ThemeContext";
+import { colors as themeColors } from "@/core/ui/theme/colors";
+import { spacing as themeSpacing } from "@/core/ui/theme/spacing";
+import { typography as themeTypography } from "@/core/ui/theme/typography";
 import { Ingredient } from "../../domain/entities/ingredient";
 import { useIngredients } from "../hooks/useIngredients";
 import { addIngredientsTranslation } from "../translation/TranslationMapper";
-import { count } from "rxjs";
 
 const AddIngredientsScreen = () => {
   const translationService = container.get<TranslationService>(
@@ -28,6 +30,8 @@ const AddIngredientsScreen = () => {
   const t = translationService.t;
   const [inputText, setInputText] = useState("");
   const { ingredients, addIngredients, removeIngredient } = useIngredients();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const styles = makeStyles(colors, typography, spacing);
 
   const handleAddIngredient = useCallback(() => {
@@ -96,6 +100,7 @@ const AddIngredientsScreen = () => {
           !ingredients.length && styles.disabledButton,
         ]}
         disabled={!ingredients.length}
+        onPress={() => navigation.navigate("SuggestRecipes", { ingredients })}
       >
         <Text style={styles.searchButtonText}>
           {t(addIngredientsTranslation.button.find, {
@@ -198,6 +203,7 @@ const makeStyles = (
       borderRadius: spacing.xs,
       alignItems: "center",
       justifyContent: "space-between",
+      height: 80,
     },
     ingredientText: {
       fontSize: typography.size.base,

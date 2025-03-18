@@ -1,15 +1,18 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { RootStack } from "./core/navigation";
 import { ThemeProvider } from "./core/ui/theme/ThemeContext";
-import { AddIngredientsScreen } from "./features/ingredients/presentation/screens/AddIngredientsScreen";
+import { NavigationContainer } from "@react-navigation/native";
 
 export default function App() {
   return (
     <SafeAreaProvider>
       <ThemeProvider>
         <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-          <AddIngredientsScreen />
+          <NavigationContainer>
+            <RootStack />
+          </NavigationContainer>
         </SafeAreaView>
       </ThemeProvider>
     </SafeAreaProvider>

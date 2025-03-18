@@ -1,8 +1,8 @@
 import { act, renderHook } from "@testing-library/react";
 import { of, Subject } from "rxjs";
-import { Ingredient } from "../../domain/entities/ingredient";
-import { ManageIngredientsUseCase } from "../../domain/usecases/manage-ingredients.usecase";
-import { useIngredients } from "./useIngredients";
+import { Ingredient } from "../../../domain/entities/ingredient";
+import { ManageIngredientsUseCase } from "../../../domain/usecases/manage-ingredients.usecase";
+import { useIngredients } from "../useIngredients";
 
 let ingredientsSubject: Subject<Ingredient[]>;
 

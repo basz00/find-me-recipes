@@ -6,6 +6,12 @@
     "addButton": "Add",
     "findRecipesButtonCount": "Find Recipes ({{count}})"
   },
+  "suggestRecipes": {
+    "title": "Recipes Suggestions",
+    "subtitle": "Recipes that can be made with the ingredients you have",
+    "noRecipesFound": "No recipes found",
+    "noRecipesFoundDescription": "Try different ingredients or check your spelling"
+  },
   "general": {
     "error": "Something went wrong"
   }

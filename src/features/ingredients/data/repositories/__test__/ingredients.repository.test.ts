@@ -1,4 +1,4 @@
-import { IngredientsRepositoryImpl } from "./../ingredients.repository";
+import { IngredientsRepositoryImpl } from "../ingredients.repository";
 import { TestScheduler } from "rxjs/testing";
 import { Ingredient } from "../../../domain/entities/ingredient";
 

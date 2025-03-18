@@ -1,4 +1,4 @@
-import { ManageIngredientsUseCaseImpl } from "./../manage-ingredients.usecase";
+import { ManageIngredientsUseCaseImpl } from "../manage-ingredients.usecase";
 import { Ingredient } from "../../entities/ingredient";
 import { of } from "rxjs";
 
@@ -11,7 +11,7 @@ const mockRepository = {
 };
 
 // Mock container.get
-jest.mock("../../../../core/di/container", () => ({
+jest.mock("@/core/di/container", () => ({
   container: {
     get: jest.fn().mockImplementation(() => mockRepository),
   },
