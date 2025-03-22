@@ -2,20 +2,16 @@ import { useEffect, useState } from "react";
 import { container } from "@/core/di/container";
 import { TYPES } from "@/core/di/types";
 import { SuggestRecipesUseCase } from "@/features/recipes/domain/usecases/suggest-recipes.usecase";
-import { Recipe } from "@/features/recipes/domain/entities/recipe";
+import { RecipeSummary } from "@/features/recipes/domain/entities/recipe";
 
-export const useSuggestRecipes = (ingredients: { name: string }[]) => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+export const useSuggestRecipes = () => {
+  const [recipes, setRecipes] = useState<RecipeSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const suggestRecipesUseCase = container.get<SuggestRecipesUseCase>(
     TYPES.SuggestRecipesUseCase
   );
 
   useEffect(() => {
-    setLoading(true);
-    const ingredientNames = ingredients.map((ingredient) => ingredient.name);
-    suggestRecipesUseCase.execute(ingredientNames);
-
     const subscription = suggestRecipesUseCase
       .observeRecipes()
       .subscribe((recipes) => {
@@ -26,9 +22,16 @@ export const useSuggestRecipes = (ingredients: { name: string }[]) => {
       });
 
     return () => subscription.unsubscribe();
-  }, [ingredients]);
+  }, []);
+
+  const execute = (ingredients: { name: string }[]) => {
+    setLoading(true);
+    const ingredientNames = ingredients.map((ingredient) => ingredient.name);
+    suggestRecipesUseCase.execute(ingredientNames);
+  };
 
   return {
+    execute,
     recipes,
     loading,
   };

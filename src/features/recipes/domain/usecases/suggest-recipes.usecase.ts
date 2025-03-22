@@ -1,14 +1,14 @@
 import { container } from "@/core/di/container";
 import { injectable } from "inversify";
-import { map, Observable } from "rxjs";
+import { filter, map, Observable, skip } from "rxjs";
 import { TYPES } from "../../../../core/di/types";
-import { Recipe } from "../entities/recipe";
+import { Mapper } from "../../data/utils";
+import { RecipeSummary } from "../entities/recipe";
 import { SuggestRecipesRepository } from "../repositories/suggest-recipes.repository";
-import { mapSpoonacularRecipeToRecipe } from "../utils";
 
 export interface SuggestRecipesUseCase {
   execute(ingredients: string[]): void;
-  observeRecipes(): Observable<Recipe[]>;
+  observeRecipes(): Observable<RecipeSummary[]>;
 }
 
 @injectable()
@@ -16,16 +16,18 @@ export class SuggestRecipesUseCaseImpl implements SuggestRecipesUseCase {
   constructor(
     private repository: SuggestRecipesRepository = container.get(
       TYPES.SuggestRecipesRepository
-    )
+    ),
+    private mapper: Mapper = container.get(TYPES.SpoonacularMapper)
   ) {}
 
   execute(ingredients: string[]) {
     this.repository.suggestRecipes(ingredients);
   }
 
-  observeRecipes(): Observable<Recipe[]> {
-    return this.repository
-      .observeRecipes()
-      .pipe(map((recipes) => recipes.map(mapSpoonacularRecipeToRecipe)));
+  observeRecipes(): Observable<RecipeSummary[]> {
+    return this.repository.observeRecipes().pipe(
+      filter((recipes) => recipes.length > 0),
+      map((recipes) => recipes.map(this.mapper.mapRecipe))
+    );
   }
 }

@@ -1,5 +1,5 @@
 import { TestScheduler } from "rxjs/testing";
-import { SpoonacularRecipe } from "../../models";
+import { SpoonacularRecipeSummary } from "../../models";
 import { SuggestRecipesRepositoryImpl } from "../suggest-recipes.repository";
 
 const mockApi = {
@@ -60,7 +60,7 @@ describe("SuggestRecipesRepositoryImpl", () => {
     it("should emit initial empty array", () => {
       testScheduler.run(({ expectObservable }) => {
         const expected$ = "a";
-        const expectedValues = { a: [] as SpoonacularRecipe[] };
+        const expectedValues = { a: [] as SpoonacularRecipeSummary[] };
         expectObservable(repository.observeRecipes()).toBe(
           expected$,
           expectedValues
@@ -69,7 +69,7 @@ describe("SuggestRecipesRepositoryImpl", () => {
     });
 
     it("should emit updated recipes", () => {
-      testScheduler.run(async ({ expectObservable, flush }) => {
+      testScheduler.run(async ({ expectObservable }) => {
         const mockResponse = { data: [{ id: 1, title: "Test Recipe" }] };
         mockApi.get.mockResolvedValue(mockResponse);
 

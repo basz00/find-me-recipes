@@ -4,11 +4,11 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { container } from "../../../../core/di/container";
 import { TYPES } from "../../../../core/di/types";
 import { SuggestRecipesRepository } from "../../domain/repositories/suggest-recipes.repository";
-import { SpoonacularRecipe } from "../models/recipes";
+import { SpoonacularRecipeSummary } from "../models/recipes";
 
 @injectable()
 export class SuggestRecipesRepositoryImpl implements SuggestRecipesRepository {
-  private recipes$ = new BehaviorSubject<SpoonacularRecipe[]>([]);
+  private recipes$ = new BehaviorSubject<SpoonacularRecipeSummary[]>([]);
   private readonly api: AxiosInstance;
 
   constructor() {
@@ -27,7 +27,7 @@ export class SuggestRecipesRepositoryImpl implements SuggestRecipesRepository {
     this.recipes$.next(response.data);
   }
 
-  observeRecipes(): Observable<SpoonacularRecipe[]> {
+  observeRecipes(): Observable<SpoonacularRecipeSummary[]> {
     return this.recipes$.asObservable();
   }
 }

@@ -1,36 +1,62 @@
-import React from "react";
-import Shimmer from "../../../../core/ui/components/Shimmer";
+import { TranslationService } from "@/core/common/translation/TranslationService";
+import { container } from "@/core/di/container";
+import { TYPES } from "@/core/di/types";
+import { RootStackParamList } from "@/core/navigation";
+import { useScreenOptions } from "@/core/navigation/utils/useScreenOptions";
+import { suggestRecipesTranslation } from "@/features/recipes/presentation/translation/TranslationMapper";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React, { useEffect, useLayoutEffect } from "react";
 import {
+  FlatList,
+  Image,
+  Pressable,
   StyleSheet,
   Text,
   View,
-  FlatList,
-  Pressable,
-  Image,
 } from "react-native";
+import Shimmer from "../../../../core/ui/components/Shimmer";
 import { useTheme } from "../../../../core/ui/theme/ThemeContext";
 import { colors as themeColors } from "../../../../core/ui/theme/colors";
 import { spacing as themeSpacing } from "../../../../core/ui/theme/spacing";
 import { typography as themeTypography } from "../../../../core/ui/theme/typography";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { RootStackParamList } from "@/core/navigation";
+import { Header } from "../components";
 import { useSuggestRecipes } from "../hooks/useSuggestRecipes";
-import { container } from "@/core/di/container";
-import { TYPES } from "@/core/di/types";
-import { TranslationService } from "@/core/common/translation/TranslationService";
-import { suggestRecipesTranslation } from "@/features/recipes/presentation/translation/TranslationMapper";
 
 const SuggestRecipesScreen = () => {
   const translationService = container.get<TranslationService>(
     TYPES.TranslationService
   );
   const t = translationService.t;
-  const route = useRoute<RouteProp<RootStackParamList, "SuggestRecipes">>();
-  const { ingredients } = route.params;
-  const { recipes, loading } = useSuggestRecipes(ingredients);
 
   const { colors, typography, spacing } = useTheme();
+  const route = useRoute<RouteProp<RootStackParamList, "SuggestRecipes">>();
+  const navigation =
+    useNavigation<
+      NativeStackNavigationProp<RootStackParamList, "RecipeDetails">
+    >();
+  const { screenOptions } = useScreenOptions({
+    headerTitle: () => (
+      <Header
+        title={t(suggestRecipesTranslation.title)}
+        subtitle={t(suggestRecipesTranslation.subtitle)}
+      />
+    ),
+    headerTintColor: colors.neutral.black,
+  });
+
+  const { ingredients } = route.params;
+  const { execute, recipes, loading } = useSuggestRecipes();
+
   const styles = makeStyles(colors, typography, spacing);
+
+  useEffect(() => {
+    execute(ingredients);
+  }, [ingredients]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions(screenOptions());
+  }, [navigation, screenOptions]);
 
   const renderRecipeItem = (
     id: number,
@@ -45,7 +71,9 @@ const SuggestRecipesScreen = () => {
       ]}
       testID={`recipe-item-${id}`}
       onPress={() => {
-        console.log("recipe", id);
+        navigation.navigate("RecipeDetails", {
+          recipeId: id,
+        });
       }}
     >
       <View style={styles.recipeContent}>
@@ -55,8 +83,20 @@ const SuggestRecipesScreen = () => {
           resizeMode="stretch"
         />
         <View style={styles.recipeText}>
-          <Text style={styles.recipeTitle}>{name}</Text>
-          <Text style={styles.recipeIngredients}>{ingredients.join(", ")}</Text>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={styles.recipeTitle}
+          >
+            {name}
+          </Text>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={styles.recipeIngredients}
+          >
+            {ingredients.join(", ")}
+          </Text>
         </View>
       </View>
     </Pressable>
@@ -64,13 +104,6 @@ const SuggestRecipesScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View>
-        <Text style={styles.title}>{t(suggestRecipesTranslation.title)}</Text>
-        <Text style={styles.subtitle}>
-          {t(suggestRecipesTranslation.subtitle)}
-        </Text>
-      </View>
-
       <FlatList
         data={loading ? [...Array(5)] : recipes}
         renderItem={({ item, index }) =>

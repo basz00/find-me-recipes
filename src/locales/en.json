@@ -12,6 +12,11 @@
     "noRecipesFound": "No recipes found",
     "noRecipesFoundDescription": "Try different ingredients or check your spelling"
   },
+  "recipeDetails": {
+    "title": "Recipe",
+    "ingredients": "Ingredients",
+    "instructions": "Instructions"
+  },
   "general": {
     "error": "Something went wrong"
   }

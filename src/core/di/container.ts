@@ -2,6 +2,10 @@ import { Container } from "inversify";
 import { TYPES } from "./types";
 import { SpoonacularApi } from "../api";
 import {
+  RecipesDetailsUseCase,
+  RecipesDetailsUseCaseImpl,
+} from "@/features/recipes/domain/usecases/recipes-details.usecase";
+import {
   ManageIngredientsUseCase,
   ManageIngredientsUseCaseImpl,
 } from "../../features/ingredients/domain/usecases/manage-ingredients.usecase";
@@ -21,6 +25,11 @@ import {
   SecureKeyValueStorage,
 } from "../security/secureStorage";
 import { ConfigService } from "../config/configService";
+import { GetDetailsApi } from "@/features/recipes/data/datasources/get-details.api";
+import { RecipesDetailsRepository } from "@/features/recipes/domain/repositories/recipes-details.repository";
+import { RecipesDetailsRepositoryImpl } from "@/features/recipes/data/repositories/recipes-details.repository";
+import { Mapper, SpoonacularMapper } from "@/features/recipes/data/utils";
+
 const container = new Container();
 
 container
@@ -50,6 +59,20 @@ container
 container
   .bind<ConfigService>(TYPES.ConfigService)
   .to(ConfigService)
+  .inSingletonScope();
+container
+  .bind<GetDetailsApi>(TYPES.GetDetailsApi)
+  .to(GetDetailsApi)
+  .inSingletonScope();
+container
+  .bind<RecipesDetailsRepository>(TYPES.RecipesDetailsRepository)
+  .to(RecipesDetailsRepositoryImpl);
+container
+  .bind<RecipesDetailsUseCase>(TYPES.RecipesDetailsUseCase)
+  .to(RecipesDetailsUseCaseImpl);
+container
+  .bind<Mapper>(TYPES.SpoonacularMapper)
+  .to(SpoonacularMapper)
   .inSingletonScope();
 
 export { container };

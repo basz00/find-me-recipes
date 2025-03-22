@@ -179,7 +179,7 @@ const makeStyles = (
       borderColor: colors.neutral.grey[200],
       borderRadius: spacing.xs,
       paddingHorizontal: spacing.input.padding,
-      fontSize: typography.size.base,
+      fontSize: typography.size.md,
       color: colors.text.primary,
       backgroundColor: colors.background.default,
     },
@@ -193,7 +193,7 @@ const makeStyles = (
     },
     addButtonText: {
       color: colors.neutral.white,
-      fontSize: typography.size.base,
+      fontSize: typography.size.md,
       fontWeight: typography.weight.semibold,
     },
     ingredientItem: {
@@ -206,7 +206,7 @@ const makeStyles = (
       height: 80,
     },
     ingredientText: {
-      fontSize: typography.size.base,
+      fontSize: typography.size.md,
       color: colors.text.primary,
       flex: 1,
     },

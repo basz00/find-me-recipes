@@ -1,1 +1,1 @@
-export * from "./SuggestRecipesScreen";
+export { default as RecipeDetailsScreen } from "./RecipeDetailsScreen";

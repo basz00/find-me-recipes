@@ -8,4 +8,8 @@ export const TYPES = {
   ConfigService: Symbol.for("ConfigService"),
   KeyValueStorage: Symbol.for("KeyValueStorage"),
   SecureKeyValueStorage: Symbol.for("SecureKeyValueStorage"),
+  GetDetailsApi: Symbol.for("GetDetailsApi"),
+  RecipesDetailsRepository: Symbol.for("RecipesDetailsRepository"),
+  RecipesDetailsUseCase: Symbol.for("RecipesDetailsUseCase"),
+  SpoonacularMapper: Symbol.for("SpoonacularMapper"),
 };

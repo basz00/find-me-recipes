@@ -1,5 +1,3 @@
-import Constants from "expo-constants";
-
 interface AppConfig {
   SPOONACULAR_API_KEY: string;
 }
