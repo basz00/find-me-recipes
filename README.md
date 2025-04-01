@@ -1,50 +1,28 @@
-# Welcome to your Expo app 👋
+# 🚀 Find Me Recipes
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Welcome to **Find Me Recipes**! This is something I developed at a relaxed pace to showcase how I approach building software. While it's a casual project, I still adhere to solid principles and best practices, especially **Clean Architecture**.
 
-## Get started
+This project is built using React Native Expo!
 
-1. Install dependencies
+## 🏗 Project Philosophy
 
-   ```bash
-   npm install
-   ```
+- **Relaxed Development** – No rush, just building something fun and meaningful.
+- **Showcasing My Approach** – This project serves as an example of how I structure and develop software.
+- **Clean Architecture** – A well-organized codebase with clear separation of concerns.
 
-2. Start the app
+## ✅ To-Do List
 
-   ```bash
-    npx expo start
-   ```
+- [ ] UI testing for **Suggestion** and **Detail** pages
+- [ ] Fix broken unit tests
+- [ ] Improve search algorithm for better ingredient matching
+- [ ] Optimize performance for large ingredient lists
+- [ ] Add favorite recipes feature
+- [ ] Enhance UI/UX for a smoother user experience
 
-In the output, you'll find options to open the app in a
+## 📋 Note
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+I don't use redux in this project, but thanks to clean architecture, it can be installed and used flawlessly by implementing new data sources for it.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Made with ❤️ and clean code.
